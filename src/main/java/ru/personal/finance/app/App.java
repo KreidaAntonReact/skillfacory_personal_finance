@@ -45,6 +45,7 @@ public class App {
 
         while (isRun) {
             System.out.print("> ");
+            System.out.flush();
 
             String input = scanner.nextLine();
 
@@ -66,7 +67,6 @@ public class App {
                 command.execute(args);
             } catch (Exception e) {
                 this.logError(e);
-                scanner.nextLine();
             }
         }
     }
@@ -89,5 +89,6 @@ public class App {
 
     private void logError(Exception error) {
         System.err.println(error.getMessage());
+        System.err.flush();
     }
 }
