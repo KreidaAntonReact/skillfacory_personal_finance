@@ -1,6 +1,6 @@
 package ru.personal.finance;
 
-import ru.personal.finance.cli.App;
+import ru.personal.finance.app.App;
 
 public class Main {
     public static void main(String[] args) {
