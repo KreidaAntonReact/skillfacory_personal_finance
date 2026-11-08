@@ -1,5 +1,7 @@
 package ru.personal.finance.services;
 
+import ru.personal.finance.domain.Operation;
+import ru.personal.finance.domain.OperationType;
 import ru.personal.finance.domain.User;
 import ru.personal.finance.domain.Wallet;
 
@@ -27,7 +29,7 @@ public class WalletService {
     }
 
     public void addCategory(User user, String category) {
-        if (category == null || category.isEmpty()) {
+        if (isNullOrEmptyValue(category)) {
             throw new IllegalArgumentException("Категория не может быть пустой!");
         }
 
@@ -37,5 +39,29 @@ public class WalletService {
             String message = String.format("Категория %s уже существует", category);
             throw new IllegalArgumentException(message);
         }
+    }
+
+    public void addIncome(User user, String category, double amount) {
+        if (isNullOrEmptyValue(category)) {
+            throw new IllegalArgumentException("Категория не может быть пустой!");
+        }
+
+        Wallet wallet = getWallet(user);
+
+        if (!wallet.hasCategory(category)) {
+            String message = String.format("Категория %s не существует", category);
+            throw new IllegalArgumentException(message);
+        }
+
+        Operation operation = new Operation();
+        operation.setType(OperationType.INCOME);
+        operation.setAmount(amount);
+        operation.setCategory(category);
+
+        wallet.addOperation(operation);
+    }
+
+    private boolean isNullOrEmptyValue (String value) {
+        return value == null || value.isEmpty();
     }
 }

@@ -16,6 +16,14 @@ public class Wallet {
         return categories.add(category);
     }
 
+    public boolean hasCategory(String category) {
+        return categories.contains(category);
+    }
+
+    public void addOperation(Operation operation) {
+        operations.add(operation);
+    }
+
     public List<Operation> getOperations() {
         return operations;
     }
