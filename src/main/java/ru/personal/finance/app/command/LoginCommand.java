@@ -1,6 +1,6 @@
 package ru.personal.finance.app.command;
 
-import ru.personal.finance.app.AuthService;
+import ru.personal.finance.services.AuthService;
 import ru.personal.finance.domain.User;
 
 public class LoginCommand implements Command {

@@ -1,7 +1,6 @@
-package ru.personal.finance.app;
+package ru.personal.finance.services;
 
 import ru.personal.finance.domain.User;
-import ru.personal.finance.services.UserService;
 
 import java.util.Objects;
 

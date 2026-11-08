@@ -7,6 +7,7 @@ import ru.personal.finance.app.command.HelpCommand;
 import ru.personal.finance.app.command.LoginCommand;
 import ru.personal.finance.app.command.LogoutCommand;
 import ru.personal.finance.repositories.UserRepository;
+import ru.personal.finance.services.AuthService;
 import ru.personal.finance.services.UserService;
 import ru.personal.finance.services.WalletService;
 
