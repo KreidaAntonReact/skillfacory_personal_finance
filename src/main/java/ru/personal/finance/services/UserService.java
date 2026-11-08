@@ -7,9 +7,11 @@ import java.util.Objects;
 
 public class UserService {
     private final UserRepository userRepository;
+    private final WalletService walletService;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, WalletService walletService) {
         this.userRepository = Objects.requireNonNull(userRepository, "Необходимо передать UserRepository!");
+        this.walletService = Objects.requireNonNull(walletService, "Необходимо передать WalletService!");
     }
 
     public User create(String login, String password) {
@@ -24,6 +26,8 @@ public class UserService {
         User user = new User();
         user.setLogin(login);
         user.setPassword(password);
+
+        walletService.createForUser(user);
 
         return userRepository.create(user);
     }
