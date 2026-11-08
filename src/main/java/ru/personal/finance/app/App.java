@@ -6,13 +6,11 @@ import ru.personal.finance.app.command.ExitCommand;
 import ru.personal.finance.app.command.HelpCommand;
 import ru.personal.finance.repositories.UserRepository;
 import ru.personal.finance.services.UserService;
+import ru.personal.finance.services.WalletService;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class App {
@@ -22,7 +20,8 @@ public class App {
 
     public App() {
         UserRepository userRepository = new UserRepository();
-        UserService userService = new UserService(userRepository);
+        WalletService walletService = new WalletService();
+        UserService userService = new UserService(userRepository, walletService);
 
         commands.put("help", new HelpCommand(commands));
         commands.put("create", new CreateCommand(userService));
@@ -51,7 +50,7 @@ public class App {
             Command command = commands.get(commandText);
 
             if (command == null) {
-                System.out.println("Вы ввели неизвестную команнду");
+                System.out.println("Вы ввели неизвестную команду");
                 continue;
             }
 
@@ -61,6 +60,7 @@ public class App {
                 command.execute(args);
             } catch (Exception e) {
                 this.logError(e);
+                scanner.nextLine();
             }
         }
     }
