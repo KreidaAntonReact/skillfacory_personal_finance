@@ -4,7 +4,10 @@ import ru.personal.finance.app.command.Command;
 import ru.personal.finance.app.command.CreateCommand;
 import ru.personal.finance.app.command.ExitCommand;
 import ru.personal.finance.app.command.HelpCommand;
+import ru.personal.finance.app.command.LoginCommand;
+import ru.personal.finance.app.command.LogoutCommand;
 import ru.personal.finance.repositories.UserRepository;
+import ru.personal.finance.services.AuthService;
 import ru.personal.finance.services.UserService;
 import ru.personal.finance.services.WalletService;
 
@@ -22,9 +25,12 @@ public class App {
         UserRepository userRepository = new UserRepository();
         WalletService walletService = new WalletService();
         UserService userService = new UserService(userRepository, walletService);
+        AuthService authService = new AuthService(userService);
 
         commands.put("help", new HelpCommand(commands));
         commands.put("create", new CreateCommand(userService));
+        commands.put("login", new LoginCommand(authService));
+        commands.put("logout", new LogoutCommand(authService));
         commands.put("exit", new ExitCommand(this::stop));
     }
 
@@ -39,6 +45,7 @@ public class App {
 
         while (isRun) {
             System.out.print("> ");
+            System.out.flush();
 
             String input = scanner.nextLine();
 
@@ -60,7 +67,6 @@ public class App {
                 command.execute(args);
             } catch (Exception e) {
                 this.logError(e);
-                scanner.nextLine();
             }
         }
     }
@@ -83,5 +89,6 @@ public class App {
 
     private void logError(Exception error) {
         System.err.println(error.getMessage());
+        System.err.flush();
     }
 }
