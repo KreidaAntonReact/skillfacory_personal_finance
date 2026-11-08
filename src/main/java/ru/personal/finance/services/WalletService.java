@@ -61,7 +61,27 @@ public class WalletService {
         wallet.addOperation(operation);
     }
 
-    private boolean isNullOrEmptyValue (String value) {
+    public void addExpense(User user, String category, double amount) {
+        if (isNullOrEmptyValue(category)) {
+            throw new IllegalArgumentException("Категория не может быть пустой!");
+        }
+
+        Wallet wallet = getWallet(user);
+
+        if (!wallet.hasCategory(category)) {
+            String message = String.format("Категория %s не существует", category);
+            throw new IllegalArgumentException(message);
+        }
+
+        Operation operation = new Operation();
+        operation.setType(OperationType.EXPENSE);
+        operation.setAmount(amount);
+        operation.setCategory(category);
+
+        wallet.addOperation(operation);
+    }
+
+    private boolean isNullOrEmptyValue(String value) {
         return value == null || value.isEmpty();
     }
 }
