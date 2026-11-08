@@ -1,4 +1,4 @@
-package ru.personal.finance.cli.command;
+package ru.personal.finance.app.command;
 
 public class ExitCommand implements Command {
     private final Runnable onExit;

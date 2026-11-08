@@ -1,4 +1,4 @@
-package ru.personal.finance.cli.command;
+package ru.personal.finance.app.command;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

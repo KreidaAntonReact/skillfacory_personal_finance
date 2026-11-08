@@ -1,0 +1,87 @@
+package ru.personal.finance.app;
+
+import ru.personal.finance.app.command.Command;
+import ru.personal.finance.app.command.CreateCommand;
+import ru.personal.finance.app.command.ExitCommand;
+import ru.personal.finance.app.command.HelpCommand;
+import ru.personal.finance.repositories.UserRepository;
+import ru.personal.finance.services.UserService;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Scanner;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class App {
+    private final Scanner scanner = new Scanner(System.in);
+    private final LinkedHashMap<String, Command> commands = new LinkedHashMap<String, Command>();
+    private boolean isRun = true;
+
+    public App() {
+        UserRepository userRepository = new UserRepository();
+        UserService userService = new UserService(userRepository);
+
+        commands.put("help", new HelpCommand(commands));
+        commands.put("create", new CreateCommand(userService));
+        commands.put("exit", new ExitCommand(this::stop));
+    }
+
+    public void stop() {
+        this.isRun = false;
+    }
+
+    public void run() {
+        System.out.println("Привет! Для того чтобы начать использовать приложение \n"
+                + "ознакомся с перечнем команд.");
+        commands.get("help").execute();
+
+        while (isRun) {
+            System.out.print("> ");
+
+            String input = scanner.nextLine();
+
+            if (input.isEmpty()) {
+                continue;
+            }
+
+            String commandText = getCommandFromInput(input);
+            Command command = commands.get(commandText);
+
+            if (command == null) {
+                System.out.println("Вы ввели неизвестную команнду");
+                continue;
+            }
+
+            String[] args = this.getArgFromInput(input);
+
+            try {
+                command.execute(args);
+            } catch (Exception e) {
+                this.logError(e);
+            }
+        }
+    }
+
+    private String getCommandFromInput(String input) {
+        return input.trim().toLowerCase().split("\\s+")[0];
+    }
+
+    private String[] getArgFromInput(String input) {
+        String[] args = input.trim().toLowerCase().split("\\s+");
+
+        if (args.length <= 1) {
+            return new String[0];
+        }
+
+        Stream<String> stream = Arrays.stream(args);
+
+        return stream.skip(1).toArray(String[]::new);
+    }
+
+    private void logError(Exception error) {
+        System.err.println(error.getMessage());
+    }
+}
