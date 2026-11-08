@@ -25,4 +25,17 @@ public class WalletService {
 
         return wallet;
     }
+
+    public void addCategory(User user, String category) {
+        if (category == null || category.isEmpty()) {
+            throw new IllegalArgumentException("Категория не может быть пустой!");
+        }
+
+        Wallet wallet = getWallet(user);
+
+        if (!wallet.addCategory(category)) {
+            String message = String.format("Категория %s уже существует", category);
+            throw new IllegalArgumentException(message);
+        }
+    }
 }
