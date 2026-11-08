@@ -2,25 +2,41 @@ package ru.personal.finance.domain;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class Wallet {
-    private final Set<String> categories = new LinkedHashSet<String>();
+    private final Map<String, Double> categories = new LinkedHashMap<String, Double>();
     private final List<Operation> operations = new ArrayList<Operation>();
-    private final Map<String, Double> budgets = new LinkedHashMap<String, Double>();
 
-    public boolean addCategory(String category) {
-        return categories.add(category);
+    public boolean addCategory(String category, double budget) {
+        if (categories.containsKey(category)) {
+            return false;
+        }
+
+        categories.put(category, budget);
+        return true;
+    }
+
+    public boolean addBudget(String category, double budget) {
+        if (!categories.containsKey(category)) {
+            return false;
+        }
+
+        categories.put(category, budget);
+        return true;
     }
 
     public boolean hasCategory(String category) {
-        return categories.contains(category);
+        return categories.containsKey(category);
     }
 
     public Set<String> getCategories() {
+        return categories.keySet();
+    }
+
+    public Map<String, Double> getCategoryBudgets() {
         return categories;
     }
 
@@ -30,9 +46,5 @@ public class Wallet {
 
     public List<Operation> getOperations() {
         return operations;
-    }
-
-    public Map<String, Double> getBudgets() {
-        return budgets;
     }
 }

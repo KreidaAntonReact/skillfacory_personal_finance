@@ -22,15 +22,36 @@ public class WalletService {
         return wallet;
     }
 
-    public void addCategory(User user, String category) {
+    public void addCategory(User user, String category, double budget) {
         if (isNullOrEmptyValue(category)) {
             throw new IllegalArgumentException("Категория не может быть пустой!");
         }
 
+        if (budget < 0) {
+            throw new IllegalArgumentException("Бюджет не может быть отрицательным!");
+        }
+
         Wallet wallet = getWallet(user);
 
-        if (!wallet.addCategory(category)) {
+        if (!wallet.addCategory(category, budget)) {
             String message = String.format("Категория %s уже существует", category);
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    public void addBudget(User user, String category, double budget) {
+        if (isNullOrEmptyValue(category)) {
+            throw new IllegalArgumentException("Категория не может быть пустой!");
+        }
+
+        if (budget < 0) {
+            throw new IllegalArgumentException("Бюджет не может быть отрицательным!");
+        }
+
+        Wallet wallet = getWallet(user);
+
+        if (!wallet.addBudget(category, budget)) {
+            String message = String.format("Категория %s не существует", category);
             throw new IllegalArgumentException(message);
         }
     }

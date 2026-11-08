@@ -1,5 +1,6 @@
 package ru.personal.finance.app;
 
+import ru.personal.finance.app.command.AddBudgetCommand;
 import ru.personal.finance.app.command.CategoriesCommand;
 import ru.personal.finance.app.command.CategoryCommand;
 import ru.personal.finance.app.command.Command;
@@ -37,6 +38,7 @@ public class App {
         commands.put("logout", new LogoutCommand(authService));
         commands.put("category", new CategoryCommand(authService, walletService));
         commands.put("categories", new CategoriesCommand(authService, walletService));
+        commands.put("addBudget", new AddBudgetCommand(authService, walletService));
         commands.put("income", new IncomeCommand(authService, walletService));
         commands.put("expense", new ExpenseCommand(authService, walletService));
         commands.put("exit", new ExitCommand(this::stop));
