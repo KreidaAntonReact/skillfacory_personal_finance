@@ -20,6 +20,10 @@ public class Wallet {
         return categories.contains(category);
     }
 
+    public Set<String> getCategories() {
+        return categories;
+    }
+
     public void addOperation(Operation operation) {
         operations.add(operation);
     }

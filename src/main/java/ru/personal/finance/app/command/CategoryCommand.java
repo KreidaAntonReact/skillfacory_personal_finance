@@ -4,15 +4,13 @@ import ru.personal.finance.domain.User;
 import ru.personal.finance.services.AuthService;
 import ru.personal.finance.services.WalletService;
 
-import java.util.Objects;
-
 public class CategoryCommand implements Command {
     private final AuthService authService;
     private final WalletService walletService;
 
     public CategoryCommand(AuthService authService, WalletService walletService) {
-        this.authService = Objects.requireNonNull(authService, "Необходимо передать AuthService!");
-        this.walletService = Objects.requireNonNull(walletService, "Необходимо передать WalletService!");
+        this.authService = authService;
+        this.walletService = walletService;
     }
 
     @Override

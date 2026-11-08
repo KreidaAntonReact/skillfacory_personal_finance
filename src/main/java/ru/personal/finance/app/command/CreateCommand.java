@@ -3,13 +3,11 @@ package ru.personal.finance.app.command;
 import ru.personal.finance.domain.User;
 import ru.personal.finance.services.UserService;
 
-import java.util.Objects;
-
 public class CreateCommand implements Command {
     private final UserService userService;
 
     public CreateCommand(UserService userService) {
-        this.userService = Objects.requireNonNull(userService, "Необходимо передать UserService!");
+        this.userService = userService;
     }
 
     @Override
