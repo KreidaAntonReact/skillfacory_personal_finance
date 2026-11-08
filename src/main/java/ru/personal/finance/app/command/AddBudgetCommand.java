@@ -34,6 +34,6 @@ public class AddBudgetCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "изменить бюджет категории - addbudget <category> <amount>";
+        return "изменить бюджет категории - addBudget <category> <amount>";
     }
 }

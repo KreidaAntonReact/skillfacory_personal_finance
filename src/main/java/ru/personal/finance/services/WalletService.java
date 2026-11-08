@@ -27,7 +27,7 @@ public class WalletService {
             throw new IllegalArgumentException("Категория не может быть пустой!");
         }
 
-        if (budget < 0) {
+        if (isNegative(budget)) {
             throw new IllegalArgumentException("Бюджет не может быть отрицательным!");
         }
 
@@ -44,7 +44,7 @@ public class WalletService {
             throw new IllegalArgumentException("Категория не может быть пустой!");
         }
 
-        if (budget < 0) {
+        if (isNegative(budget)) {
             throw new IllegalArgumentException("Бюджет не может быть отрицательным!");
         }
 
@@ -98,5 +98,9 @@ public class WalletService {
 
     private boolean isNullOrEmptyValue(String value) {
         return value == null || value.isEmpty();
+    }
+
+    private boolean isNegative(double number) {
+        return number < 0;
     }
 }
