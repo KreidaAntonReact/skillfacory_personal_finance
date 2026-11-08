@@ -4,6 +4,8 @@ import ru.personal.finance.app.command.Command;
 import ru.personal.finance.app.command.CreateCommand;
 import ru.personal.finance.app.command.ExitCommand;
 import ru.personal.finance.app.command.HelpCommand;
+import ru.personal.finance.app.command.LoginCommand;
+import ru.personal.finance.app.command.LogoutCommand;
 import ru.personal.finance.repositories.UserRepository;
 import ru.personal.finance.services.UserService;
 import ru.personal.finance.services.WalletService;
@@ -22,9 +24,12 @@ public class App {
         UserRepository userRepository = new UserRepository();
         WalletService walletService = new WalletService();
         UserService userService = new UserService(userRepository, walletService);
+        AuthService authService = new AuthService(userService);
 
         commands.put("help", new HelpCommand(commands));
         commands.put("create", new CreateCommand(userService));
+        commands.put("login", new LoginCommand(authService));
+        commands.put("logout", new LogoutCommand(authService));
         commands.put("exit", new ExitCommand(this::stop));
     }
 
