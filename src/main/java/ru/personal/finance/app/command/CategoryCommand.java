@@ -15,25 +15,18 @@ public class CategoryCommand implements Command {
 
     @Override
     public void execute(String... args) {
-        if (args.length < 2) {
-            throw new IllegalArgumentException("Использование: category <name> <budget>");
+        if (args.length < 1) {
+            throw new IllegalArgumentException("Использование: category <name>");
         }
 
         User user = authService.requireCurrentUser();
-        double budget;
 
-        try {
-            budget = Double.parseDouble(args[1]);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Бюджет должен быть числом!");
-        }
-
-        walletService.addCategory(user, args[0], budget);
-        System.out.printf("Категория %s успешно создана с бюджетом %.1f%n", args[0], budget);
+        walletService.addCategory(user, args[0]);
+        System.out.printf("Категория %s успешно создана", args[0]);
     }
 
     @Override
     public String getDescription() {
-        return "создать категорию - category <name> <budget>";
+        return "создать категорию - category <name>";
     }
 }

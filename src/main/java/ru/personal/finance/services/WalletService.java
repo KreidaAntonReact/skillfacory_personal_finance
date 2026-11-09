@@ -22,36 +22,15 @@ public class WalletService {
         return wallet;
     }
 
-    public void addCategory(User user, String category, double budget) {
+    public void addCategory(User user, String category) {
         if (isNullOrEmptyValue(category)) {
             throw new IllegalArgumentException("Категория не может быть пустой!");
         }
 
-        if (isNegative(budget)) {
-            throw new IllegalArgumentException("Бюджет не может быть отрицательным!");
-        }
-
         Wallet wallet = getWallet(user);
 
-        if (!wallet.addCategory(category, budget)) {
+        if (!wallet.addCategory(category)) {
             String message = String.format("Категория %s уже существует", category);
-            throw new IllegalArgumentException(message);
-        }
-    }
-
-    public void addBudget(User user, String category, double budget) {
-        if (isNullOrEmptyValue(category)) {
-            throw new IllegalArgumentException("Категория не может быть пустой!");
-        }
-
-        if (isNegative(budget)) {
-            throw new IllegalArgumentException("Бюджет не может быть отрицательным!");
-        }
-
-        Wallet wallet = getWallet(user);
-
-        if (!wallet.addBudget(category, budget)) {
-            String message = String.format("Категория %s не существует", category);
             throw new IllegalArgumentException(message);
         }
     }
@@ -98,9 +77,5 @@ public class WalletService {
 
     private boolean isNullOrEmptyValue(String value) {
         return value == null || value.isEmpty();
-    }
-
-    private boolean isNegative(double number) {
-        return number < 0;
     }
 }
