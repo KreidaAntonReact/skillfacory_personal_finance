@@ -1,11 +1,12 @@
 package ru.personal.finance.app.command;
 
+import ru.personal.finance.domain.Category;
 import ru.personal.finance.domain.User;
 import ru.personal.finance.domain.Wallet;
 import ru.personal.finance.services.AuthService;
 import ru.personal.finance.services.WalletService;
 
-import java.util.Set;
+import java.util.Collection;
 
 public class CategoriesCommand implements Command {
     private final AuthService authService;
@@ -20,7 +21,7 @@ public class CategoriesCommand implements Command {
     public void execute(String... args) {
         User user = authService.requireCurrentUser();
         Wallet wallet = walletService.getWallet(user);
-        Set<String> categories = wallet.getCategories();
+        Collection<Category> categories = wallet.getCategories();
 
         if (categories.isEmpty()) {
             System.out.println("Категории пока не созданы");
@@ -29,8 +30,8 @@ public class CategoriesCommand implements Command {
 
         System.out.println("Категории кошелька:");
         int order = 1;
-        for (String category : categories) {
-            System.out.printf("%d. %s%n", order, category);
+        for (Category category : categories) {
+            System.out.printf("%d. %s (%s)%n", order, category.getName(), category.getType());
             order++;
         }
     }

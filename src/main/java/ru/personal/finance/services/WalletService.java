@@ -1,5 +1,7 @@
 package ru.personal.finance.services;
 
+import ru.personal.finance.domain.Category;
+import ru.personal.finance.domain.CategoryType;
 import ru.personal.finance.domain.Operation;
 import ru.personal.finance.domain.OperationType;
 import ru.personal.finance.domain.User;
@@ -22,57 +24,75 @@ public class WalletService {
         return wallet;
     }
 
-    public void addCategory(User user, String category) {
-        if (isNullOrEmptyValue(category)) {
+    public void addCategory(User user, String name, CategoryType type) {
+        if (isNullOrEmptyValue(name)) {
             throw new IllegalArgumentException("Категория не может быть пустой!");
+        }
+
+        if (type == null) {
+            throw new IllegalArgumentException("Тип категории не может быть пустым!");
         }
 
         Wallet wallet = getWallet(user);
 
-        if (!wallet.addCategory(category)) {
-            String message = String.format("Категория %s уже существует", category);
+        Category category = new Category();
+        category.setName(name);
+        category.setType(type);
+
+        boolean isCreate = wallet.addCategory(category);
+
+        if (!isCreate) {
+            String message = String.format("Категория %s уже существует", name);
             throw new IllegalArgumentException(message);
         }
     }
 
-    public void addIncome(User user, String category, double amount) {
-        if (isNullOrEmptyValue(category)) {
-            throw new IllegalArgumentException("Категория не может быть пустой!");
-        }
-
-        Wallet wallet = getWallet(user);
-
-        if (!wallet.hasCategory(category)) {
-            String message = String.format("Категория %s не существует", category);
-            throw new IllegalArgumentException(message);
-        }
+    public void addIncome(User user, String categoryName, double amount) {
+        Category category = requireCategory(user, categoryName, CategoryType.INCOME);
 
         Operation operation = new Operation();
         operation.setType(OperationType.INCOME);
         operation.setAmount(amount);
-        operation.setCategory(category);
+        operation.setCategory(category.getName());
 
-        wallet.addOperation(operation);
+        getWallet(user).addOperation(operation);
     }
 
-    public void addExpense(User user, String category, double amount) {
-        if (isNullOrEmptyValue(category)) {
-            throw new IllegalArgumentException("Категория не может быть пустой!");
-        }
-
-        Wallet wallet = getWallet(user);
-
-        if (!wallet.hasCategory(category)) {
-            String message = String.format("Категория %s не существует", category);
-            throw new IllegalArgumentException(message);
-        }
+    public void addExpense(User user, String categoryName, double amount) {
+        Category category = requireCategory(user, categoryName, CategoryType.EXPENSE);
 
         Operation operation = new Operation();
         operation.setType(OperationType.EXPENSE);
         operation.setAmount(amount);
-        operation.setCategory(category);
+        operation.setCategory(category.getName());
 
-        wallet.addOperation(operation);
+        getWallet(user).addOperation(operation);
+    }
+
+    private Category requireCategory(User user, String categoryName, CategoryType expectedType) {
+        if (isNullOrEmptyValue(categoryName)) {
+            throw new IllegalArgumentException("Категория не может быть пустой!");
+        }
+
+        Wallet wallet = getWallet(user);
+        Category category = wallet.getCategory(categoryName);
+
+        if (category == null) {
+            String message = String.format("Категория %s не существует", categoryName);
+            throw new IllegalArgumentException(message);
+        }
+
+        if (category.getType() != expectedType) {
+            String message = String.format(
+                    "Категория %s имеет тип %s, ожидался %s",
+                    categoryName,
+                    category.getType(),
+                    expectedType
+            );
+            throw new IllegalArgumentException(message);
+        }
+
+        return category;
     }
 
     private boolean isNullOrEmptyValue(String value) {
