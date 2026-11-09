@@ -1,21 +1,34 @@
 package ru.personal.finance.domain;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Wallet {
-    private final Set<String> categories = new LinkedHashSet<String>();
+    private final Map<String, Category> categories = new LinkedHashMap<String, Category>();
     private final List<Operation> operations = new ArrayList<Operation>();
 
-    public boolean addCategory(String category) {
-        return categories.add(category);
+    public boolean addCategory(Category category) {
+        if (categories.containsKey(category.getName())) {
+            return false;
+        }
+
+        categories.put(category.getName(), category);
+        return true;
     }
 
-    public boolean hasCategory(String category) {
-        return categories.contains(category);
+    public boolean hasCategory(String name) {
+        return categories.containsKey(name);
     }
 
-    public Set<String> getCategories() {
-        return categories;
+    public Category getCategory(String name) {
+        return categories.get(name);
+    }
+
+    public Collection<Category> getCategories() {
+        return categories.values();
     }
 
     public void addOperation(Operation operation) {
