@@ -1,5 +1,6 @@
 package ru.personal.finance.app;
 
+import ru.personal.finance.app.command.BudgetCommand;
 import ru.personal.finance.app.command.CategoriesCommand;
 import ru.personal.finance.app.command.CategoryCommand;
 import ru.personal.finance.app.command.Command;
@@ -37,6 +38,7 @@ public class App {
         commands.put("logout", new LogoutCommand(authService));
         commands.put("category", new CategoryCommand(authService, walletService));
         commands.put("categories", new CategoriesCommand(authService, walletService));
+        commands.put("budget", new BudgetCommand(authService, walletService));
         commands.put("income", new IncomeCommand(authService, walletService));
         commands.put("expense", new ExpenseCommand(authService, walletService));
         commands.put("exit", new ExitCommand(this::stop));
@@ -84,7 +86,7 @@ public class App {
     }
 
     private String[] getArgFromInput(String input) {
-        String[] args = input.trim().toLowerCase().split("\\s+");
+        String[] args = input.trim().split("\\s+");
 
         if (args.length <= 1) {
             return new String[0];

@@ -47,15 +47,32 @@ public class WalletService {
         }
     }
 
+    public void addBudget(User user, String categoryName, double budget) {
+        if (budget < 0) {
+            throw new IllegalArgumentException("Бюджет не может быть отрицательным!");
+        }
+
+        Category category = requireExistingCategory(user, categoryName);
+        category.setBudget(budget);
+    }
+
+    public double getBudget(User user, String categoryName) {
+        Category category = requireExistingCategory(user, categoryName);
+
+        return category.getBudget().orElseThrow(() -> {
+            String message = String.format("У категории %s бюджет не установлен", categoryName);
+            return new IllegalArgumentException(message);
+        });
+    }
+
     public void addIncome(User user, String categoryName, double amount) {
         Category category = requireCategory(user, categoryName, CategoryType.INCOME);
 
         Operation operation = new Operation();
         operation.setType(OperationType.INCOME);
         operation.setAmount(amount);
-        operation.setCategory(category.getName());
 
-        getWallet(user).addOperation(operation);
+        getWallet(user).addOperation(operation, category.getName());
     }
 
     public void addExpense(User user, String categoryName, double amount) {
@@ -64,23 +81,27 @@ public class WalletService {
         Operation operation = new Operation();
         operation.setType(OperationType.EXPENSE);
         operation.setAmount(amount);
-        operation.setCategory(category.getName());
 
-        getWallet(user).addOperation(operation);
+        getWallet(user).addOperation(operation, category.getName());
     }
 
-    private Category requireCategory(User user, String categoryName, CategoryType expectedType) {
+    private Category requireExistingCategory(User user, String categoryName) {
         if (isNullOrEmptyValue(categoryName)) {
             throw new IllegalArgumentException("Категория не может быть пустой!");
         }
 
-        Wallet wallet = getWallet(user);
-        Category category = wallet.getCategory(categoryName);
+        Category category = getWallet(user).getCategory(categoryName);
 
         if (category == null) {
             String message = String.format("Категория %s не существует", categoryName);
             throw new IllegalArgumentException(message);
         }
+
+        return category;
+    }
+
+    private Category requireCategory(User user, String categoryName, CategoryType expectedType) {
+        Category category = requireExistingCategory(user, categoryName);
 
         if (category.getType() != expectedType) {
             String message = String.format(
