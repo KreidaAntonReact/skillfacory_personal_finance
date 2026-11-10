@@ -13,7 +13,7 @@ public class LoginCommand implements Command {
     @Override
     public void execute(String... args) {
         if (args.length < 2) {
-            throw new IllegalArgumentException("Использование: login <login> <password>");
+            throw new IllegalArgumentException(getMessageHowUseCommand());
         }
 
         User authUser = authService.login(args[0], args[1]);
@@ -23,5 +23,9 @@ public class LoginCommand implements Command {
     @Override
     public String getDescription() {
         return "войти в систему - login <login> <password>";
+    }
+
+    private String getMessageHowUseCommand() {
+        return "Ошибка при вводе. Нужно использовать: login <login> <password>";
     }
 }

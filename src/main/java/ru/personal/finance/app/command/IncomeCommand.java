@@ -16,7 +16,7 @@ public class IncomeCommand implements Command {
     @Override
     public void execute(String... args) {
         if (args.length < 2) {
-            throw new IllegalArgumentException("Использование: income <category> <amount>");
+            throw new IllegalArgumentException(getMessageHowUseCommand());
         }
 
         User user = authService.requireCurrentUser();
@@ -35,5 +35,9 @@ public class IncomeCommand implements Command {
     @Override
     public String getDescription() {
         return "добавить доход - income <category> <amount>";
+    }
+
+    private String getMessageHowUseCommand() {
+        return "Ошибка при вводе. Нужно использовать: income <category> <amount>";
     }
 }

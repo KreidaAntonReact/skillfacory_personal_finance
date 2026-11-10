@@ -27,11 +27,23 @@ public class CategoryCommand implements Command {
             return;
         }
 
-        if (args.length < 2) {
-            throw new IllegalArgumentException(getDescription());
+        if ("add".equalsIgnoreCase(args[0])) {
+            addCategory(user, args);
+            return;
         }
 
-        this.createNewCategory(user, args);
+        throw new IllegalArgumentException(getMessageHowUseCommand());
+    }
+
+    private void addCategory(User user, String... args) {
+        if (args.length < 3) {
+            throw new IllegalArgumentException(getMessageHowUseCommand());
+        }
+
+        CategoryType type = parseCategoryType(args[2]);
+
+        walletService.addCategory(user, args[1], type);
+        System.out.printf("Категория %s (%s) успешно создана%n", args[1], type);
     }
 
     private void showCategories(User user) {
@@ -51,13 +63,6 @@ public class CategoryCommand implements Command {
         }
     }
 
-    private void createNewCategory(User user, String... args) {
-        CategoryType type = parseCategoryType(args[1]);
-
-        walletService.addCategory(user, args[0], type);
-        System.out.printf("Категория %s (%s) успешно создана%n", args[0], type);
-    }
-
     private CategoryType parseCategoryType(String value) {
         try {
             return CategoryType.valueOf(value.toUpperCase());
@@ -68,6 +73,10 @@ public class CategoryCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "категории - category <name> <income|expense> | category";
+        return "категории - category add <name> <income|expense> | category";
+    }
+
+    private String getMessageHowUseCommand() {
+        return "Ошибка при вводе. Нужно использовать: category add <name> <income|expense> | category";
     }
 }

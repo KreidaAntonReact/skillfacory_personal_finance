@@ -16,7 +16,7 @@ public class ExpenseCommand implements Command {
     @Override
     public void execute(String... args) {
         if (args.length < 2) {
-            throw new IllegalArgumentException("Использование: expense <category> <amount>");
+            throw new IllegalArgumentException(getMessageHowUseCommand());
         }
 
         User user = authService.requireCurrentUser();
@@ -35,5 +35,9 @@ public class ExpenseCommand implements Command {
     @Override
     public String getDescription() {
         return "добавить расход - expense <category> <amount>";
+    }
+
+    private String getMessageHowUseCommand() {
+        return "Ошибка при вводе. Нужно использовать: expense <category> <amount>";
     }
 }
