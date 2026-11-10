@@ -39,8 +39,8 @@ public class App {
         commands.put("create", new CreateCommand(userService));
         commands.put("category", new CategoryCommand(authService, walletService));
         commands.put("budget", new BudgetCommand(authService, walletService));
-        commands.put("income", new IncomeCommand(authService, walletService));
-        commands.put("expense", new ExpenseCommand(authService, walletService));
+        commands.put("income", new IncomeCommand(authService, walletService, statisticService));
+        commands.put("expense", new ExpenseCommand(authService, walletService, statisticService));
         commands.put("stats", new StatisticCommand(authService, walletService, statisticService));
         commands.put("exit", new ExitCommand(this::stop));
         commands.put("help", new HelpCommand(commands));

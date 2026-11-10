@@ -77,4 +77,12 @@ public class StatisticService {
 
         return requireCategories(wallet, categoryNames);
     }
+
+    public boolean isBudgetExceeded(Category category) {
+        return category.getBudget().isPresent() && category.getRemainingBudget() < 0;
+    }
+
+    public boolean isExpenseExceedIncome(Wallet wallet) {
+        return getTotalExpense(wallet) > getTotalIncome(wallet);
+    }
 }
