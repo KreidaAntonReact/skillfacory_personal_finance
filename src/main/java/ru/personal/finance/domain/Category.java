@@ -46,4 +46,17 @@ public class Category {
     public void addOperation(Operation operation) {
         operations.add(Objects.requireNonNull(operation, "Необходимо передать операцию!"));
     }
+
+    public double getRemainingBudget() {
+        if (budget == null) {
+            throw new IllegalStateException("У категории бюджет не установлен");
+        }
+
+        double spent = 0;
+        for (Operation operation : operations) {
+            spent += operation.getAmount();
+        }
+
+        return budget - spent;
+    }
 }

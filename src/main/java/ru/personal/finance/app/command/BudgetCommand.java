@@ -39,6 +39,11 @@ public class BudgetCommand implements Command {
         throw new IllegalArgumentException(getMessageHowUseCommand());
     }
 
+    @Override
+    public String getDescription() {
+        return "бюджет категории - budget add <category> <amount> | budget <category> | budget";
+    }
+
     private void addBudget(User user, String... args) {
         if (args.length < 3) {
             throw new IllegalArgumentException("Использование: budget add <category> <amount>");
@@ -56,9 +61,14 @@ public class BudgetCommand implements Command {
         System.out.printf("Бюджет категории %s установлен: %.1f%n", args[1], budget);
     }
 
-    private void showBudget(User user, String category) {
-        double budget = walletService.getBudget(user, category);
-        System.out.printf("Бюджет категории %s: %.1f%n", category, budget);
+    private void showBudget(User user, String categoryName) {
+        Category category = walletService.getCategoryWithBudget(user, categoryName);
+        System.out.printf(
+                "%s: %.1f, Оставшийся бюджет: %.1f%n",
+                category.getName(),
+                category.getBudget().get(),
+                category.getRemainingBudget()
+        );
     }
 
     private void showBudgets(User user) {
@@ -73,7 +83,13 @@ public class BudgetCommand implements Command {
                 continue;
             }
 
-            message.append(String.format("%d. %s %.1f%n", order, category.getName(), category.getBudget().get()));
+            message.append(String.format(
+                    "%d. %s: %.1f, Оставшийся бюджет: %.1f%n",
+                    order,
+                    category.getName(),
+                    category.getBudget().get(),
+                    category.getRemainingBudget()
+            ));
             order++;
         }
 
@@ -88,10 +104,5 @@ public class BudgetCommand implements Command {
 
     private String getMessageHowUseCommand() {
         return "Использование: budget add <category> <amount> | budget <category> | budget";
-    }
-
-    @Override
-    public String getDescription() {
-        return "бюджет категории - budget add <category> <amount> | budget <category> | budget";
     }
 }

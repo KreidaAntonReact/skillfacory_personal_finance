@@ -56,13 +56,15 @@ public class WalletService {
         category.setBudget(budget);
     }
 
-    public double getBudget(User user, String categoryName) {
+    public Category getCategoryWithBudget(User user, String categoryName) {
         Category category = requireExistingCategory(user, categoryName);
 
-        return category.getBudget().orElseThrow(() -> {
+        if (category.getBudget().isEmpty()) {
             String message = String.format("У категории %s бюджет не установлен", categoryName);
-            return new IllegalArgumentException(message);
-        });
+            throw new IllegalArgumentException(message);
+        }
+
+        return category;
     }
 
     public void addIncome(User user, String categoryName, double amount) {
