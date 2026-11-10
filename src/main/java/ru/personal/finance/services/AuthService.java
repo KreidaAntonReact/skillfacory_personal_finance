@@ -33,10 +33,6 @@ public class AuthService {
         this.currentUser = null;
     }
 
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
     public User requireCurrentUser() {
         if (Objects.isNull(currentUser)) {
             throw new IllegalStateException("Необходимо войти в систему!");

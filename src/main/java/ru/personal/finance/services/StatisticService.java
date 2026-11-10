@@ -29,18 +29,6 @@ public class StatisticService {
         return total;
     }
 
-    public Collection<Category> getCategoriesByType(Wallet wallet, CategoryType type) {
-        List<Category> result = new ArrayList<Category>();
-
-        for (Category category : wallet.getCategories()) {
-            if (category.getType() == type) {
-                result.add(category);
-            }
-        }
-
-        return result;
-    }
-
     public Collection<Category> requireCategories(Wallet wallet, String... names) {
         List<Category> result = new ArrayList<Category>();
 
