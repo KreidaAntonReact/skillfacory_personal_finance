@@ -5,7 +5,6 @@ import java.util.Objects;
 public class Operation {
     private OperationType type;
     private double amount;
-    private String category;
 
     public OperationType getType() {
         return type;
@@ -13,10 +12,6 @@ public class Operation {
 
     public double getAmount() {
         return amount;
-    }
-
-    public String getCategory() {
-        return category;
     }
 
     public void setType(OperationType type) {
@@ -28,9 +23,5 @@ public class Operation {
             throw new IllegalArgumentException("Сумма операции должна быть строго положительной!");
         }
         this.amount = amount;
-    }
-
-    public void setCategory(String category) {
-        this.category = Objects.requireNonNull(category, "Необходимо передать категорию!");
     }
 }

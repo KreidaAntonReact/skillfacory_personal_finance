@@ -13,7 +13,7 @@ public class CreateCommand implements Command {
     @Override
     public void execute(String... args) {
         if (args.length < 2) {
-            throw new IllegalArgumentException("Использование: create <login> <password>");
+            throw new IllegalArgumentException(getMessageHowUseCommand());
         }
 
         User user = userService.create(args[0], args[1]);
@@ -23,5 +23,9 @@ public class CreateCommand implements Command {
     @Override
     public String getDescription() {
         return "создать пользователя в системе - create <login> <password>";
+    }
+
+    private String getMessageHowUseCommand() {
+        return "Ошибка при вводе. Нужно использовать: create <login> <password>";
     }
 }

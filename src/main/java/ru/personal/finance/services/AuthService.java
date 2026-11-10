@@ -15,8 +15,10 @@ public class AuthService {
     public User login(String login, String password) {
         User user = userService.findUser(login);
 
-        if (Objects.nonNull(currentUser) && currentUser.getLogin().equals(login)) {
-            throw new IllegalStateException("Пользователь уже авторизован");
+        if (Objects.nonNull(currentUser)) {
+            String message = String.format("Вы уже авторизованы как - %s", currentUser.getLogin());
+
+            throw new IllegalStateException(message);
         }
 
         if (!user.getPassword().equals(password)) {
