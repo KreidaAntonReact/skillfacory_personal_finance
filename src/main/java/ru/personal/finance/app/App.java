@@ -10,8 +10,10 @@ import ru.personal.finance.app.command.ExpenseCommand;
 import ru.personal.finance.app.command.IncomeCommand;
 import ru.personal.finance.app.command.LoginCommand;
 import ru.personal.finance.app.command.LogoutCommand;
+import ru.personal.finance.app.command.StatisticCommand;
 import ru.personal.finance.repositories.UserRepository;
 import ru.personal.finance.services.AuthService;
+import ru.personal.finance.services.StatisticService;
 import ru.personal.finance.services.UserService;
 import ru.personal.finance.services.WalletService;
 
@@ -28,6 +30,7 @@ public class App {
     public App() {
         UserRepository userRepository = new UserRepository();
         WalletService walletService = new WalletService();
+        StatisticService statisticService = new StatisticService();
         UserService userService = new UserService(userRepository, walletService);
         AuthService authService = new AuthService(userService);
 
@@ -36,8 +39,9 @@ public class App {
         commands.put("create", new CreateCommand(userService));
         commands.put("category", new CategoryCommand(authService, walletService));
         commands.put("budget", new BudgetCommand(authService, walletService));
-        commands.put("income", new IncomeCommand(authService, walletService));
-        commands.put("expense", new ExpenseCommand(authService, walletService));
+        commands.put("income", new IncomeCommand(authService, walletService, statisticService));
+        commands.put("expense", new ExpenseCommand(authService, walletService, statisticService));
+        commands.put("stats", new StatisticCommand(authService, walletService, statisticService));
         commands.put("exit", new ExitCommand(this::stop));
         commands.put("help", new HelpCommand(commands));
     }
