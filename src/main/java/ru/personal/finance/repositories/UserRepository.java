@@ -2,7 +2,9 @@ package ru.personal.finance.repositories;
 
 import ru.personal.finance.domain.User;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -28,5 +30,17 @@ public class UserRepository {
         }
 
         return findUser;
+    }
+
+    public List<User> findAll() {
+        return new ArrayList<User>(users.values());
+    }
+
+    public void replaceAll(List<User> usersForMap) {
+        users.clear();
+
+        for (User user : usersForMap) {
+            users.put(user.getLogin(), user);
+        }
     }
 }
