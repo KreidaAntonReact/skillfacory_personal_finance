@@ -12,10 +12,7 @@ import ru.personal.finance.app.command.LoginCommand;
 import ru.personal.finance.app.command.LogoutCommand;
 import ru.personal.finance.app.command.StatisticCommand;
 import ru.personal.finance.repositories.UserRepository;
-import ru.personal.finance.services.AuthService;
-import ru.personal.finance.services.StatisticService;
-import ru.personal.finance.services.UserService;
-import ru.personal.finance.services.WalletService;
+import ru.personal.finance.services.*;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -25,10 +22,13 @@ import java.util.stream.Stream;
 public class App {
     private final Scanner scanner = new Scanner(System.in);
     private final LinkedHashMap<String, Command> commands = new LinkedHashMap<String, Command>();
+    private final PersistService persistService;
     private boolean isRun = true;
 
     public App() {
         UserRepository userRepository = new UserRepository();
+        this.persistService = new PersistService(userRepository);
+
         WalletService walletService = new WalletService();
         StatisticService statisticService = new StatisticService();
         UserService userService = new UserService(userRepository, walletService);
@@ -47,10 +47,18 @@ public class App {
     }
 
     public void stop() {
+        try {
+            persistService.save();
+        } catch (Exception e) {
+            logError(e);
+        }
+
         this.isRun = false;
     }
 
     public void run() {
+        this.persistService.load();
+
         System.out.println("Привет! Для того чтобы начать использовать приложение \n"
                 + "ознакомся с перечнем команд.");
         commands.get("help").execute();
