@@ -1,7 +1,6 @@
 package ru.personal.finance.app;
 
 import ru.personal.finance.app.command.BudgetCommand;
-import ru.personal.finance.app.command.CategoriesCommand;
 import ru.personal.finance.app.command.CategoryCommand;
 import ru.personal.finance.app.command.Command;
 import ru.personal.finance.app.command.CreateCommand;
@@ -32,16 +31,15 @@ public class App {
         UserService userService = new UserService(userRepository, walletService);
         AuthService authService = new AuthService(userService);
 
-        commands.put("help", new HelpCommand(commands));
-        commands.put("create", new CreateCommand(userService));
         commands.put("login", new LoginCommand(authService));
         commands.put("logout", new LogoutCommand(authService));
+        commands.put("create", new CreateCommand(userService));
         commands.put("category", new CategoryCommand(authService, walletService));
-        commands.put("categories", new CategoriesCommand(authService, walletService));
         commands.put("budget", new BudgetCommand(authService, walletService));
         commands.put("income", new IncomeCommand(authService, walletService));
         commands.put("expense", new ExpenseCommand(authService, walletService));
         commands.put("exit", new ExitCommand(this::stop));
+        commands.put("help", new HelpCommand(commands));
     }
 
     public void stop() {

@@ -36,7 +36,7 @@ public class BudgetCommand implements Command {
             return;
         }
 
-        throw new IllegalArgumentException(getMessageHowUseCommand());
+        throw new IllegalArgumentException(getDescription());
     }
 
     @Override
@@ -100,9 +100,5 @@ public class BudgetCommand implements Command {
 
         System.out.println("Бюджеты:");
         System.out.print(message);
-    }
-
-    private String getMessageHowUseCommand() {
-        return "Использование: budget add <category> <amount> | budget <category> | budget";
     }
 }
